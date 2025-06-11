@@ -1,0 +1,50 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Entorno
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs
+*.log
+*.csv
+*.pid
+*.seed
+*.tgz
+
+# Directorios comunes
+dist/
+build/
+tmp/
+temp/
+.cache/
+.next/
+out/
+
+# VSCode y editores
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+
+# Sistema operativo
+Thumbs.db
+ehthumbs.db
+
+# Archivos de sistema
+*.bak
+*.old
+
+# Otros
+coverage/
+*.tgz
+*.zip
+*.rar
+*.tar

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fedorable - Checkout</title>
+
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    body {
+      padding-top: 4.5rem;
+    }
+    footer {
+      background-color: #f8f9fa;
+      padding: 2rem 0;
+      text-align: center;
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Fedorable</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="/productos">Productos</a></li>
+          <li class="nav-item"><a class="nav-link" href="/quienes-somos">Quiénes Somos</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contacto">Contacto</a></li>
+          <li class="nav-item">
+            <a class="nav-link position-relative active" href="/checkout">
+              🛒 Carrito
+              <span id="carrito-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                0
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mt-5">
+    <h2 class="mb-4 text-center">Resumen del Carrito</h2>
+
+    <table class="table table-striped" id="tabla-carrito">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th class="text-end">Precio</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr>
+          <td class="fw-bold">Total</td>
+          <td class="fw-bold text-end" id="total-carrito">$0.00</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="text-center mt-4">
+      <div id="stripe-checkout-placeholder" class="p-4 border border-warning rounded bg-light text-muted">
+        <h5>🛠️ Stripe Checkout</h5>
+        <p>Esta sección está en mantenimiento. Pronto podrás realizar pagos aquí.</p>
+      
+        <!-- BEGIN YOUR CODING CHALLENGES HERE -->
+        <!-- 
+          Desafío 1: Embebe el botón de Stripe Checkout (Buy Button)
+      
+          Agrega el script de Stripe:
+          <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+      
+          Luego agrega un botón de compra como este:
+          <stripe-buy-button
+            buy-button-id="tu-buy-button-id-aqui"
+            publishable-key="tu-publishable-key-aqui">
+          </stripe-buy-button>
+      
+        -->
+      
+        <!-- 
+          Desafío 2: Crear lógica para enviar productos al backend (API propia)
+      
+          En lugar del botón embebido, puedes usar un botón que envíe el carrito a una ruta como /create-checkout-session
+      
+          Ejemplo:
+          const response = await fetch('/create-checkout-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ carrito }),
+          });
+      
+          Luego redirige al usuario a la URL recibida:
+          const { url } = await response.json();
+          window.location = url;
+      
+        -->
+      
+        <!-- 
+          Desafío 3 (opcional): Mostrar feedback si el carrito está vacío y desactivar el botón de pago
+        -->
+      </div>
+      
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="mb-0">© 2025 Fedorable - Todos los derechos reservados</p>
+    </div>
+  </footer>
+
+  <script>
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const tbody = document.querySelector('#tabla-carrito tbody');
+    const totalSpan = document.getElementById('total-carrito');
+
+    let total = 0;
+    carrito.forEach(p => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${p.nombre}</td>
+        <td class="text-end">$${p.precio.toFixed(2)}</td>
+      `;
+      tbody.appendChild(row);
+      total += p.precio;
+    });
+
+    totalSpan.textContent = `$${total.toFixed(2)}`;
+
+    function actualizarContadorCarrito() {
+      const badge = document.getElementById('carrito-count');
+      if (badge) badge.textContent = carrito.length;
+    }
+
+    actualizarContadorCarrito();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

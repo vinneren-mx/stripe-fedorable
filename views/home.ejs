@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fedorable - Inicio</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body { padding-top: 4.5rem; }
+    .hero {
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      padding: 5rem 2rem;
+      text-align: center;
+      border-radius: 1rem;
+    }
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Fedorable</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="/">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="/productos">Productos</a></li>
+          <li class="nav-item"><a class="nav-link" href="/quienes-somos">Quiénes Somos</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contacto">Contacto</a></li>
+          <li class="nav-item">
+            <a class="nav-link position-relative" href="/checkout">
+              🛒 Carrito
+              <span id="carrito-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mt-4">
+    <section class="hero mb-5">
+      <h1 class="display-4">Bienvenido a Fedorable</h1>
+      <p class="lead">Los sombreros más elegantes, ponle sombra al sol y estilo a tu cabeza.</p>
+      <a href="/productos" class="btn btn-light btn-lg mt-3">Explorar Catálogo</a>
+    </section>
+
+    <h2 class="mb-4 text-center">Productos Destacados</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+      <% productos.forEach(p => { %>
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <img src="https://placehold.co/400x300?text=<%= encodeURIComponent(p.nombre) %>" class="card-img-top" alt="<%= p.nombre %>">
+            <div class="card-body">
+              <h5 class="card-title"><%= p.nombre %></h5>
+              <p class="card-text">$<%= p.precio.toFixed(2) %></p>
+              <button onclick='agregarAlCarrito(<%- JSON.stringify(p) %>)' class="btn btn-outline-primary w-100">Agregar al carrito</button>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </main>
+
+  <script>
+    function agregarAlCarrito(producto) {
+      const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+      carrito.push(producto);
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      actualizarContadorCarrito();
+    }
+
+    function actualizarContadorCarrito() {
+      const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+      const badge = document.getElementById('carrito-count');
+      if (badge) badge.textContent = carrito.length;
+    }
+
+    actualizarContadorCarrito();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
