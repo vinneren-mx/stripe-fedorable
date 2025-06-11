@@ -58,7 +58,7 @@
       <% productos.forEach(p => { %>
         <div class="col">
           <div class="card h-100 shadow-sm">
-            <img src="https://placehold.co/400x300?text=<%= encodeURIComponent(p.nombre) %>" class="card-img-top" alt="<%= p.nombre %>">
+            <img src="<%= p.imagen %>" class="card-img-top" alt="<%= p.nombre %>">
             <div class="card-body">
               <h5 class="card-title"><%= p.nombre %></h5>
               <p class="card-text">$<%= p.precio.toFixed(2) %></p>

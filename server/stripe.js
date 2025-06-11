@@ -12,7 +12,8 @@ async function obtenerProductos() {
       nombre: product.name,
       descripcion: product.description || '',
       precio: (price?.unit_amount || 0) / 100,
-      moneda: price?.currency.toUpperCase() || 'MXN'
+      moneda: price?.currency.toUpperCase() || 'MXN',
+      imagen: product.images[0] || 'https://placehold.co/400x300?text=Sin+imagen',
     };
   });
 }
