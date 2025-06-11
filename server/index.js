@@ -5,6 +5,7 @@ require('dotenv').config();
 
 // Importar función para obtener productos desde Stripe
 const obtenerProductos = require('./stripe');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 // Middlewares
 app.use(express.static(path.join(__dirname, '../public')));
@@ -160,86 +161,22 @@ app.get('/cancel', (req, res) => res.render('cancel'));
 
 // BEGIN YOUR CODING CHALLENGES HERE (Fraude temprano y reembolsos)
 
-// Desafío Webhook: Escuchar eventos desde Stripe
+// Desafío 1: Detectar eventos de alerta temprana de fraude
+// Stripe envía un evento llamado 'charge.dispute.created' cuando detecta una posible actividad fraudulenta.
 
-// Paso 1: Crea un endpoint POST '/webhook'
-// Este endpoint debe usar 'express.raw({type: 'application/json'})' para leer el cuerpo sin parsear
-// Debes verificar la firma del webhook con stripe.webhooks.constructEvent
+// Verificamos si el evento es de tipo 'charge.dispute.created'
+// if (event.type === 'charge.dispute.created') {
+//   const chargeId = event.data.object.charge;
 
-// Paso 2: Usa tu STRIPE_WEBHOOK_SECRET para validar los eventos entrantes
-// En el archivo del servidor, navega al mensaje del ejercicio de firma de webhook. Copia todo el mensaje.
-// Navega a tu implementación del endpoint /webhook. Dentro del endpoint, justo después de la definición del endpoint, pega el mensaje del ejercicio.
-
-// Usando los comentarios como guía, crea lógica para verificar que el evento provenga de Stripe.
-
-// Para probarlo:
-// 1. Inicia la aplicación Fedorable con `npm run dev`
-// 2. En la otra terminal, reenvía los eventos a tu endpoint:
-//    stripe listen --forward-to localhost:3000/webhook
-// 3. Navega a la tienda y realiza un pago de prueba exitoso (tarjeta: 4242 4242 4242 4242)
-// 4. Observa el registro de la consola para validar que la firma del webhook ocurrió.
-//
-// Para ver la verificación en acción:
-// - Detén la aplicación Fedorable (deja activo el escucha de webhook)
-// - En el archivo .env, comenta la variable STRIPE_WEBHOOK_SECRET
-// - Reinicia la app y realiza otro pago exitoso
-// - Observa que ahora se lanza un error al intentar verificar la firma
-//
-// Por último:
-// - Detén la aplicación y el escucha del webhook con Ctrl+C
-// - Descomenta la variable STRIPE_WEBHOOK_SECRET en .env para validar los eventos entrantes
-// Puedes capturar eventos como:
-// - 'checkout.session.completed'
-// - 'payment_intent.succeeded'
-// - 'payment_intent.payment_failed'
-
-// Paso 3: Imprime en consola el tipo de evento y su ID para confirmar que lo recibiste
-// Ejemplo:
-// console.log(`🔔 Evento recibido: ${event.type}`);
-
-// Paso 4: Para probarlo:
-// 1. Inicia el servidor con `npm run dev`
-// 2. En otra terminal, corre:
-//    stripe listen --forward-to localhost:3000/webhook
-// 3. Realiza una compra con tarjeta de prueba (por ejemplo: 4242 4242 4242 4242)
-// 4. Observa la consola del servidor y la de Stripe CLI
-
-// Recuerda detener ambos procesos con Ctrl+C cuando termines.
-
-// --- Aquí es donde puedes implementar la lógica del webhook ---
-
-// 🚨 Ejercicio: Reembolsar los pagos de alerta temprana de fraude
-// Abre el archivo del servidor y navega al mensaje del ejercicio de alerta temprana de fraude. Copia el mensaje.
-// Navega a tu implementación del endpoint /webhook. Dentro del endpoint, antes de la verificación del tipo de evento, pega el mensaje del ejercicio.
-
-// Usando los comentarios como guía:
-// - Escucha eventos tipo 'charge.dispute.created' o 'review.opened' para detectar alertas tempranas de fraude.
-// - Si se detecta una alerta:
-//     1. Obtén el ID del cargo (charge id) del evento
-//     2. Llama a `stripe.refunds.create({ charge: 'ch_123' })`
-//     3. Imprime en consola que se procesó un reembolso por alerta de fraude
-
-// Para probarlo:
-// 1. Inicia la aplicación Fedorable con `npm run dev`
-// 2. En otra terminal, ejecuta:
-//    stripe listen --forward-to localhost:3000/webhook
-// 3. Navega a la app, llena un carrito y haz clic en pagar
-// 4. Usa una tarjeta de prueba de Stripe que dispare alerta temprana (por ejemplo: 4000 0027 6000 3184)
-// 5. Observa en consola que se generó un reembolso automático
-
-// Detén la aplicación y el escucha de webhook con Ctrl+C
-// app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
-//   const sig = req.headers['stripe-signature'];
-//   let event;
-//   try {
-//     event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-//   } catch (err) {
-//     console.log(`⚠️  Webhook error: ${err.message}`);
-//     return res.sendStatus(400);
-//   }
-//   console.log(`🔔 Evento recibido: ${event.type}`);
-//   res.send();
-// });
+//   // Desafío 2: Reembolsar automáticamente el cargo asociado
+//   stripe.refunds.create({ charge: chargeId })
+//     .then(refund => {
+//       console.log(`💰 Reembolso exitoso por alerta de fraude. ID de cargo: ${chargeId}, ID de reembolso: ${refund.id}`);
+//     })
+//     .catch(err => {
+//       console.error('❌ Error al reembolsar automáticamente:', err.message);
+//     });
+// }
 
 
 const PORT = process.env.PORT || 3000;
