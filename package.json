@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node server/index.js",
-    "setup": "echo 'Aquí se pueden crear productos con la API de Stripe'"
+    "setup": "node scripts/setup.js"
   },
   "dependencies": {
     "dotenv": "^16.0.0",
