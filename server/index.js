@@ -33,6 +33,9 @@ app.get('/contacto', (req, res) => res.render('contacto'));
 app.get('/quienes-somos', (req, res) => res.render('quienes'));
 app.get('/checkout', (req, res) => res.render('checkout'));
 
+app.get('/success', (req, res) => res.render('success'));
+app.get('/cancel', (req, res) => res.render('cancel'));
+
 
 // BEGIN YOUR CODING CHALLENGES HERE (Creación de sesión de pago con Stripe)
 // Desafío 1: Crear una ruta POST '/create-checkout-session'
